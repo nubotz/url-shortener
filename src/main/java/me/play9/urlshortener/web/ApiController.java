@@ -9,8 +9,6 @@ import me.play9.urlshortener.web.webinterface.CheckSlugResponse;
 import me.play9.urlshortener.web.webinterface.CreateRecordRequest;
 import me.play9.urlshortener.web.webinterface.CreateRecordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +23,8 @@ import javax.validation.Valid;
 public class ApiController {
     @Autowired
     ShortenRecordService service;
-
     @Autowired
     AppConfig appConfig;
-
-    @GetMapping("/test/{slug}")
-    public String test(@PathVariable("slug") String slug) {
-        return slug;
-    }
 
     @PutMapping("/records/check-slug")
     public CheckSlugResponse checkSlug(@Valid @RequestBody CheckSlugRequest request) {

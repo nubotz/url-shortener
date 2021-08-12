@@ -14,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.PostConstruct;
-import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Controller
@@ -39,20 +37,6 @@ public class WebController {
     @GetMapping("/")
     public ModelAndView index() {
         return indexModelAndView;
-    }
-
-    @GetMapping("/create")
-    public String create() {
-        ZonedDateTime now = ZonedDateTime.now();
-
-        var record = new ShortenRecord();
-        record.slug = "okok";
-        record.targetUrl = "https://google.com";
-        record.expiredAt = now.plus(Duration.ofMinutes(1));
-        record.createdAt = now;
-        repository.save(record);
-
-        return "index";
     }
 
     @GetMapping("/{slug}")
