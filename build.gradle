@@ -37,7 +37,7 @@ test {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'me.play9.UrlShortenerApplication'
+                'Main-Class': 'me.play9.urlshortener.UrlShortenerApplication'
         )
     }
 }
