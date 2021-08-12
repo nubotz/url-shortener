@@ -37,7 +37,8 @@ test {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'me.play9.urlshortener.UrlShortenerApplication'
+                'Main-Class': 'me.play9.urlshortener.UrlShortenerApplication',
+                'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' ')
         )
     }
 }
