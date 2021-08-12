@@ -31,7 +31,7 @@ function ajaxCreateRecord() {
                 successUrlDom.innerText = data.url;
                 document.getElementById('success-panel').classList.remove('d-none');
             } else {
-                document.getElementById('slug').classList.add('is-invalid');
+                slugInvalid(data.errorMessage);
                 document.getElementById('success-panel').classList.add('d-none');
             }
         })
