@@ -13,12 +13,12 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Log4j2
 @Service
 public class ShortenRecordService {
-    static Set<String> RESERVED_SEGMENT = Set.of("api", "css", "js");
+    private static final String[] RESERVED_SEGMENTS = {"api", "css", "js"};
+    private static final char[] RESERVED_CHARS = {'/', '?', '#'};
 
     static Map<CreateRecordRequest.EXPIRE_DURATION, Duration> DURATION_MAP = Map.ofEntries(
             Map.entry(CreateRecordRequest.EXPIRE_DURATION.MIN_5, Duration.ofMinutes(5)),
@@ -33,7 +33,7 @@ public class ShortenRecordService {
     ShortenRecordRepository repository;
 
     public boolean exist(String slug) {
-        return repository.countBySlug(slug) > 0;
+        return repository.existsBySlug(slug);
     }
 
     public ShortenRecord create(CreateRecordRequest request) {
@@ -57,12 +57,19 @@ public class ShortenRecordService {
 
     public void removeExpired() {
         long count = repository.deleteByExpiredAtBefore(ZonedDateTime.now());
-        log.info("remove expired record, count={}", count);
+        if (count > 0) {
+            log.info("remove expired record, count={}", count);
+        }
     }
 
     private void validate(CreateRecordRequest request) {
-        if (request.slug.contains("?"))
-        for (String reserved : RESERVED_SEGMENT) {
+        for (char c : RESERVED_CHARS) {
+            if (request.slug.indexOf(c) != -1) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid slug");
+            }
+        }
+
+        for (String reserved : RESERVED_SEGMENTS) {
             if (request.slug.equalsIgnoreCase(reserved) || request.slug.startsWith(reserved + "/")) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid slug");
             }

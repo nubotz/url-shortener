@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ShortenRecordRepository extends CrudRepository<ShortenRecord, Long> {
-    long countBySlug(String slug);
+    boolean existsBySlug(String slug);
 
     Optional<ShortenRecord> findBySlug(String slug);
 

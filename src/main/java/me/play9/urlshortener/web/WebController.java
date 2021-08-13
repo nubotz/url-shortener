@@ -45,6 +45,11 @@ public class WebController {
         if (recordOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found");
         }
-        return new RedirectView(recordOptional.get().targetUrl);
+
+        String url = recordOptional.get().targetUrl;
+        if (!url.contains("://")) {
+            url = "https://" + url;
+        }
+        return new RedirectView(url);
     }
 }
